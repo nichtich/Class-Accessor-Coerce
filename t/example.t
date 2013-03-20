@@ -45,25 +45,29 @@ is $dave->surname, 'Smith';
 {
     package Artifact;
     use Moo;
-    use MooX::AutoConstructor;
+    use Class::Accessor::Coerce;
     use Scalar::Util qw(blessed);
+
+    sub coerce_creator {
+        (blessed $_[0] and $_[0]->isa('Person')) ? $_[0] : Person->new( @_ );
+    }
 
     has creator => (
         is => 'rw',
-        coerce => sub { # this only works for a single argument
-            (blessed $_[0] and $_[0]->isa('Person')) ? 
-                $_[0] : Person->new( $_[0] );
-        }
+        coerce => \&coerce_creator, # this only works for a single argument
     );
 
-    autoconstructor
-        creator => 'Person';
+    coerce creator => \&coerce_creator;
 }
 
 diag('Artifact');
 
 my $artifact = Artifact->new;
 is $artifact->creator, undef;
+
+$artifact = Artifact->new( creator => 'Bob' );
+is $artifact->creator->given, 'Bob';
+is $artifact->creator->surname, undef; 
 
 $artifact->creator('Smith', 'Alice');
 is $artifact->creator->given, 'Alice';

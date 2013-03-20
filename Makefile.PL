@@ -9,24 +9,25 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "Extends accessors to automatically call constructors if needed",
+  "ABSTRACT" => "Extends class accessors with coercing",
   "AUTHOR" => "Jakob Vo\303\237 <voss\@gbv.de>",
   "BUILD_REQUIRES" => {
+    "List::Util" => 0,
     "Moo" => "1.000000",
     "Test::More" => "0.88"
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
-  "DISTNAME" => "MooX-AutoConstructor",
+  "DISTNAME" => "Class-Accessor-Coerce",
   "EXE_FILES" => [],
   "LICENSE" => "perl",
-  "NAME" => "MooX::AutoConstructor",
+  "NAME" => "Class::Accessor::Coerce",
   "PREREQ_PM" => {
     "Class::Method::Modifiers" => "1.05",
     "Scalar::Util" => 0
   },
-  "VERSION" => "0.1_01",
+  "VERSION" => "0.1_02",
   "test" => {
     "TESTS" => "t/*.t"
   }
