@@ -48,16 +48,18 @@ is $dave->surname, 'Smith';
     use Class::Accessor::Coerce;
     use Scalar::Util qw(blessed);
 
-    sub coerce_creator {
-        (blessed $_[0] and $_[0]->isa('Person')) ? $_[0] : Person->new( @_ );
-    }
-
     has creator => (
         is => 'rw',
-        coerce => \&coerce_creator, # this only works for a single argument
+        coerce => sub {
+            return $_[0] if blessed $_[0] and $_[0]->isa('Person');
+            return Person->new( ref $_[0] ? @{$_[0]} : $_[0] );
+        }
     );
 
-    coerce creator => \&coerce_creator;
+    around creator => sub {
+        my ($orig, $self, @rest) = @_;
+        $self->$orig( @rest ? \@rest : () );
+    }
 }
 
 diag('Artifact');
