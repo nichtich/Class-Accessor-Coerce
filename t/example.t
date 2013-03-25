@@ -56,10 +56,22 @@ is $dave->surname, 'Smith';
         }
     );
 
-    around creator => sub {
-        my ($orig, $self, @rest) = @_;
-        $self->$orig( @rest ? \@rest : () );
+    has foo => (
+        is => 'rw'
+    );
+
+    expect_arrayref('foo','creator');
+
+    sub expect_arrayref {
+        around @_ => sub {
+            my ($orig, $self, @rest) = @_;
+            $self->$orig( @rest ? \@rest : () );
+        }
     }
+
+    # ...
+    # ...
+    # ...
 }
 
 diag('Artifact');
